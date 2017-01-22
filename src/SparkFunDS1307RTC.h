@@ -64,9 +64,11 @@ enum ds1307_registers {
 	DS1307_REGISTER_DATE,    // 0x04
 	DS1307_REGISTER_MONTH,   // 0x05
 	DS1307_REGISTER_YEAR,    // 0x06
-	DS1307_REGISTER_CONTROL  // 0x07
+	DS1307_REGISTER_CONTROL, // 0x07
 	DS1307_REGISTER_DATA     // 0x08
 };
+
+#define DS1307_DATA 0x08
 
 // Base register for complete time/date readings
 #define DS1307_REGISTER_BASE DS1307_REGISTER_SECONDS
@@ -166,10 +168,10 @@ public:
 	//////////////////////////////
 	// Reading and storing data //
 	//////////////////////////////
-    bool getData(unint8_t *, unint8_t=1);
-    unint8_t getData(unint8_t = 0);
-    bool setData(unint8_t *, unint8_t=1);
-    bool setData(unint8_t, unint8_t=0);
+    bool getData(uint8_t *, uint8_t=1);
+    uint8_t getData(uint8_t = 0);
+    bool setData(uint8_t *, uint8_t=1);
+    bool setData(uint8_t, uint8_t=0);
 	
 private:
 	uint8_t _time[TIME_ARRAY_LENGTH];
@@ -180,7 +182,9 @@ private:
 	
 	bool i2cWriteBytes(uint8_t deviceAddress, ds1307_registers reg, uint8_t * values, uint8_t len);
 	bool i2cWriteByte(uint8_t deviceAddress, ds1307_registers reg, uint8_t value);
+	bool i2cWriteByte(uint8_t deviceAddress, uint8_t reg, uint8_t value);
 	uint8_t i2cReadByte(uint8_t deviceAddress, ds1307_registers reg);
+	uint8_t i2cReadByte(uint8_t deviceAddress, uint8_t reg);
 	bool i2cReadBytes(uint8_t deviceAddress, ds1307_registers reg, uint8_t * dest, uint8_t len);
 };
 

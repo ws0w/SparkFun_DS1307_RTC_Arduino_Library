@@ -456,6 +456,17 @@ bool DS1307::i2cWriteBytes(uint8_t deviceAddress, ds1307_registers reg, uint8_t 
 }
 
 // i2cWriteByte -- write a byte value to an i2c device's register
+bool DS1307::i2cWriteByte(uint8_t deviceAddress, uint8_t reg, uint8_t value)
+{
+	Wire.beginTransmission(deviceAddress);
+	Wire.write(reg);
+	Wire.write(value);
+	Wire.endTransmission();
+	
+	return true;
+}
+
+// i2cWriteByte -- write a byte value to an i2c device's register
 bool DS1307::i2cWriteByte(uint8_t deviceAddress, ds1307_registers reg, uint8_t value)
 {
 	Wire.beginTransmission(deviceAddress);
@@ -464,6 +475,20 @@ bool DS1307::i2cWriteByte(uint8_t deviceAddress, ds1307_registers reg, uint8_t v
 	Wire.endTransmission();
 	
 	return true;
+}
+
+// i2cReadByte -- read a byte from an i2c device's register
+uint8_t DS1307::i2cReadByte(uint8_t deviceAddress, uint8_t reg)
+{
+	uint8_t readTemp;
+	
+	Wire.beginTransmission(deviceAddress);
+	Wire.write(reg);
+	Wire.endTransmission();
+
+	Wire.requestFrom(deviceAddress, (uint8_t) 1);
+	
+	return Wire.read();
 }
 
 // i2cReadByte -- read a byte from an i2c device's register
@@ -496,12 +521,12 @@ bool DS1307::i2cReadBytes(uint8_t deviceAddress, ds1307_registers reg, uint8_t *
 	return true;  
 }
 
-unint8_t DS1307::getData(uint8_t index)
+uint8_t DS1307::getData(uint8_t index)
 {
 	uint8_t data;
     if (index < DATA_ARRAY_LENGTH)
     {
-	    data = i2cReadByte(DS1307_RTC_ADDRESS, DS1307_REGISTER_DATA+index);
+	    data = i2cReadByte(DS1307_RTC_ADDRESS, DS1307_DATA+index);
         return data;
     }
     else
@@ -514,7 +539,7 @@ bool DS1307::setData(uint8_t data, uint8_t index)
 {
     if (index < DATA_ARRAY_LENGTH)
     {
-		return i2cWriteByte(DS1307_RTC_ADDRESS, DS1307_REGISTER_DATA+index, data);
+		return i2cWriteByte(DS1307_RTC_ADDRESS, DS1307_DATA+index, data);
     }
     else
     {
