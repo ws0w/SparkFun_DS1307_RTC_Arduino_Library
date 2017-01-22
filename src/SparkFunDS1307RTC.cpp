@@ -496,4 +496,61 @@ bool DS1307::i2cReadBytes(uint8_t deviceAddress, ds1307_registers reg, uint8_t *
 	return true;  
 }
 
+unint8_t DS1307::getData(uint8_t index)
+{
+	uint8_t data;
+    if (index < DATA_ARRAY_LENGTH)
+    {
+	    data = i2cReadByte(DS1307_RTC_ADDRESS, DS1307_REGISTER_DATA+index);
+        return data;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+bool DS1307::setData(uint8_t data, uint8_t index)
+{
+    if (index < DATA_ARRAY_LENGTH)
+    {
+		return i2cWriteByte(DS1307_RTC_ADDRESS, DS1307_REGISTER_DATA+index, data);
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool DS1307::setData(uint8_t *data, uint8_t len)
+{
+    if (len <= DATA_ARRAY_LENGTH)
+    {
+	    return i2cWriteBytes(DS1307_RTC_ADDRESS, DS1307_REGISTER_DATA, data, len);
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool DS1307::getData(uint8_t *data, uint8_t len)
+{
+    if (len <= DATA_ARRAY_LENGTH)
+    {
+	    if (i2cReadBytes(DS1307_RTC_ADDRESS, DS1307_REGISTER_DATA, data, len))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
 DS1307 rtc; // Use rtc in sketches

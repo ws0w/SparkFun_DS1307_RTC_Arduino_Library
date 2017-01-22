@@ -33,7 +33,8 @@ SparkFun Real Time Clock Module (v14)
 #define CONTROL_BIT_SQWE (1<<4) // Square wave enable bit in control register
 #define CONTROL_BIT_OUT (1<<7)  // SQW Output value in control register
 
-#define TIME_ARRAY_LENGTH 7 // Total number of writable values in device
+#define TIME_ARRAY_LENGTH 7 // Total number of writable time values in device
+#define DATA_ARRAY_LENGTH 56 // Total number of writable data values in device
 enum time_order {
 	TIME_SECONDS, // 0
 	TIME_MINUTES, // 1
@@ -64,6 +65,7 @@ enum ds1307_registers {
 	DS1307_REGISTER_MONTH,   // 0x05
 	DS1307_REGISTER_YEAR,    // 0x06
 	DS1307_REGISTER_CONTROL  // 0x07
+	DS1307_REGISTER_DATA     // 0x08
 };
 
 // Base register for complete time/date readings
@@ -140,7 +142,7 @@ public:
 	uint8_t getDate(void);
 	uint8_t getMonth(void);
 	uint8_t getYear(void);
-	
+
 	// is12Hour -- check if the DS1307 is in 12-hour mode | returns true if 12-hour mode
 	bool is12Hour(void);
 	// pm -- Check if 12-hour state is AM or PM | returns true if PM
@@ -160,6 +162,14 @@ public:
 	
 	bool set12Hour(bool enable12 = true); // Enable/disable 12-hour mode
 	bool set24Hour(bool enable24 = true); // Enable/disable 24-hour mode
+
+	//////////////////////////////
+	// Reading and storing data //
+	//////////////////////////////
+    bool getData(unint8_t *, unint8_t=1);
+    unint8_t getData(unint8_t = 0);
+    bool setData(unint8_t *, unint8_t=1);
+    bool setData(unint8_t, unint8_t=0);
 	
 private:
 	uint8_t _time[TIME_ARRAY_LENGTH];
